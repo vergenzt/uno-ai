@@ -19,7 +19,7 @@ class UnoDeck(object):
 
     def _fill_with_cards(self):
         ''' Add the default Uno card set to this deck. '''
-        for color in 'rgby':
+        for color in 'RGBY':
             self._deck.append(Num(0, color))
             for num in 2 * range(1, 10):
                 self._deck.append(Num(num, color))
@@ -79,13 +79,15 @@ class Num(UnoCard):
         self.num = num
         self.color = color
     def is_play_allowed(self, game):
-        if self.color == game.play_color:
+        if self.color == game.color:
             return True
         top = game.play_pile.top_card()
         if isinstance(top, Num) and top.num == self.num:
             return True
     def do_effects(self, player, game):
         game.color = self.color
+    def __str__(self):
+        return '%s %s' % (self.color, self.num)
 
 class Special(UnoCard):
     def __init__(self, color):
@@ -101,18 +103,24 @@ class Special(UnoCard):
 
 class Skip(Special):
     def do_effects(self, player, game):
-        super.do_effect(player, game)
+        Special.do_effects(self, player, game)
         game._turn_iter.next()
+    def __str__(self):
+        return '%s Skip' % self.color
 
 class Reverse(Special):
     def do_effects(self, player, game):
-        super.do_effect(player, game)
+        Special.do_effects(self, player, game)
         game.reverse()
+    def __str__(self):
+        return '%s Reverse' % self.color
 
 class DrawTwo(Special):
     def do_effects(self, player, game):
-        super.do_effect(player, game)
+        Special.do_effects(self, player, game)
         def draw_hook(_player, _game):
             _game._hands[_player] += _game.deck.draw_multiple(2)
             _game.end_turn()
         game.add_turn_hook(draw_hook)
+    def __str__(self):
+        return '%s DrawTwo' % self.color

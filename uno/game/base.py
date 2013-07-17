@@ -39,6 +39,7 @@ class UnoGame(object):
         player = self._turn_iter.next()
 
         if self._turn_hook is not None:
+            assert callable(self._turn_hook)
             self._turn_hook(player, self)
             if self._end_turn:
                 self._end_turn = False
