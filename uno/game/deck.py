@@ -38,6 +38,9 @@ class UnoDeck(object):
         self._deck[-n:] = []
         return cards
 
+    def __len__(self):
+        return len(self._deck)
+
 class UnoPile(list):
     ''' Represent a face-up pile of Uno cards. '''
 

@@ -29,7 +29,7 @@ class UnoAgent(object):
         raise NotImplementedError()
 
 
-class UserAgent(UnoAgent):
+class UserAgentProxy(UnoAgent):
     ''' A user-controlled agent that asks what to do on the command line. '''
 
     def __init__(self, name):
